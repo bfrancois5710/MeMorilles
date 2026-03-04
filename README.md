@@ -33,8 +33,14 @@ h1 {
 
 
 .card {
-    width: 100px;
-    height: 170px;
+    width: 80px;
+    height: 100px;
+    background: #6b8e23;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
 }
 
 .card.flip {
