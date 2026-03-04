@@ -9,9 +9,14 @@ Me-morilles is a memory game card
 <style>
 body {
     font-family: Arial, sans-serif;
-    background: #f4f1ea;
+    background-image: url("5.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     text-align: center;
+    color: white;
 }
+
 
 h1 {
     margin-top: 20px;
@@ -27,10 +32,11 @@ h1 {
 }
 
 .card {
-    width: 100%;
-    aspect-ratio: 2 / 3;
+    .card {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
-
 
 .card.flip {
     transform: rotateY(180deg);
