@@ -33,8 +33,8 @@ h1 {
 
 
 .card {
-    width: 80px;
-    height: 100px;
+    width: 140px;
+    height: 220px;
     background: #6b8e23;
     border-radius: 10px;
     cursor: pointer;
