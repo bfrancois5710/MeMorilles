@@ -1,5 +1,4 @@
-# Me-morilles
-Me-morilles is a memory game card
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -7,63 +6,87 @@ Me-morilles is a memory game card
 <title>Me_morille 🍄</title>
 
 <style>
+/* ---- FOND DE PAGE ---- */
 body {
     font-family: Arial, sans-serif;
-    background-image: url("tout-savoir-sur-la-foret.jpg");
+    background-image: url("fond_foret.jpg"); /* ton fond perso */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     text-align: center;
     color: white;
+    margin: 0;
+    padding: 0;
 }
 
+/* ---- SUPERPOSITION SI BESOIN ---- */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: -1;
+}
 
+/* ---- TITRE ---- */
 h1 {
     margin-top: 20px;
     letter-spacing: 2px;
 }
 
+/* ---- GRILLE DES CARTES ---- */
 .game-board {
-    width: 360px;
-    margin: 30px auto;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 15px;
+    max-width: 900px;
+    margin: 40px auto;
 }
 
-
+/* ---- CARTES ---- */
 .card {
-    width: 100px;
-    height: 170px;
+    width: 100%;
+    aspect-ratio: 2 / 3; /* vertical */
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* ---- RECTO ---- */
+.front {
+    position: absolute;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;
+    background-image: url("5.jpg"); /* ton recto personnalisé */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* ---- VERSO ---- */
+.back {
+    position: absolute;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .card.flip {
     transform: rotateY(180deg);
 }
 
-.front, .back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    backface-visibility: hidden;
-}
-
-.front {
-    background-image: url("5.jpg");
-
-}
-
-.back {
-    transform: rotateY(180deg);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-}
-
+/* ---- COMPTEUR ET BOUTON ---- */
 #moves {
     margin-top: 15px;
+    font-size: 18px;
 }
 
 button {
@@ -89,106 +112,24 @@ button {
 <button onclick="restartGame()">Recommencer</button>
 
 <script>
+// ---- IMAGES DES CARTES ----
 const images = [
     "1.jpg",
     "2.jpg",
     "3.jpg",
     "4.jpg"
-
 ];
 
+// ---- VARIABLES ----
 let cardsArray = [...images, ...images];
 let firstCard, secondCard;
 let lockBoard = false;
 let moves = 0;
 
+// ---- ELEMENTS DOM ----
 const board = document.getElementById("gameBoard");
 const movesDisplay = document.getElementById("moves");
 
+// ---- FONCTIONS ----
 function shuffle(array) {
-    array.sort(() => 0.5 - Math.random());
-}
-
-function createBoard() {
-    board.innerHTML = "";
-    shuffle(cardsArray);
-    cardsArray.forEach(image => {
-        const card = document.createElement("div");
-        card.classList.add("card");
-        card.dataset.image = image;
-
-        const front = document.createElement("div");
-        front.classList.add("front");
-
-        const back = document.createElement("div");
-        back.classList.add("back");
-        back.style.backgroundImage = `url(${image})`;
-
-        card.appendChild(front);
-        card.appendChild(back);
-
-        card.addEventListener("click", flipCard);
-        board.appendChild(card);
-    });
-}
-
-function flipCard() {
-    if (lockBoard) return;
-    if (this === firstCard) return;
-
-    this.classList.add("flip");
-
-    if (!firstCard) {
-        firstCard = this;
-        return;
-    }
-
-    secondCard = this;
-    moves++;
-    movesDisplay.textContent = "Coups : " + moves;
-
-    checkMatch();
-}
-
-function checkMatch() {
-    let isMatch = firstCard.dataset.image === secondCard.dataset.image;
-
-    if (isMatch) {
-        firstCard.removeEventListener("click", flipCard);
-        secondCard.removeEventListener("click", flipCard);
-        resetBoard();
-        checkWin();
-    } else {
-        lockBoard = true;
-        setTimeout(() => {
-            firstCard.classList.remove("flip");
-            secondCard.classList.remove("flip");
-            resetBoard();
-        }, 1000);
-    }
-}
-
-function resetBoard() {
-    [firstCard, secondCard, lockBoard] = [null, null, false];
-}
-
-function checkWin() {
-    const flippedCards = document.querySelectorAll(".flip");
-    if (flippedCards.length === cardsArray.length) {
-        setTimeout(() => {
-            alert("Bravo ! Tu es un maître des morilles 🍄✨");
-        }, 500);
-    }
-}
-
-function restartGame() {
-    moves = 0;
-    movesDisplay.textContent = "Coups : 0";
-    createBoard();
-}
-
-createBoard();
-</script>
-
-</body>
-</html>
+    array.sort(() => 0.5
