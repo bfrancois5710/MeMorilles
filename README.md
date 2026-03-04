@@ -3,70 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🍄 Me_morilles 🍄</title>
+<title> 🍄 MeMorille 🍄</title>
 
 <style>
-/* BODY & FOND */
+
+/* 🌲 FOND FORET */
 body {
-    font-family: IMPACT, sans-serif;
-    background: linear-gradient(180deg, #2e3d2f, #151a16); /* tout-savoir-sur-la-foret.jpg *
-    color: white;
+    font-family: Arial, sans-serif;
+    background-image: url("tout-savoir-la-foret.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     text-align: center;
+    color: white;
     margin: 0;
-    padding: 0;
 }
 
-/* TITRE & PARAGRAPHE */
+/* Overlay sombre pour lisibilité */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: -1;
+}
+
 h1 {
     margin-top: 20px;
-    letter-spacing: 2px;
 }
 
-p {
-    margin-bottom: 10px;
-}
-
-/* COMPTEUR */
 #moves {
     margin-top: 10px;
     font-size: 18px;
 }
 
-/* MESSAGE DE VICTOIRE */
-#winMessage {
+/* 🏆 IMAGE FINALE */
+#winScreen {
     display: none;
-    font-size: 28px;
     margin-top: 20px;
-    color: #ffd700;
-    animation: pop 0.5s ease forwards;
+}
+
+#winScreen img {
+    width: 300px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    animation: pop 0.6s ease forwards;
 }
 
 @keyframes pop {
     0% { transform: scale(0); opacity: 0; }
-    50% { transform: scale(1.2); opacity: 1; }
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* PLATEAU */
+/* 🎴 PLATEAU */
 .game-board {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
+    gap: 20px;
     max-width: 900px;
-    margin: 30px auto;
+    margin: 40px auto;
 }
 
 /* CARTES */
 .card {
     width: 100%;
-    aspect-ratio: 2 / 3; /* cartes verticales */
-    cursor: pointer;
+    aspect-ratio: 2 / 3;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.5s;
+    transition: transform 0.6s;
+    cursor: pointer;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
 }
 
 .card.flip {
@@ -80,32 +88,29 @@ p {
     backface-visibility: hidden;
 }
 
-/* RECTO : image dos de carte */
+/* 🃏 RECTO UNIQUE */
 .front {
-    background-image: url("mm5.jpg"); /* ton image Canva pour le recto */
+    background-image: url("Bbm5.jpg");
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
 }
 
-/* VERSO : morille */
+/* 🍄 VERSO */
 .back {
     transform: rotateY(180deg);
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
 }
 
 /* BOUTON */
 button {
-    margin-top: 20px;
     padding: 10px 20px;
     border: none;
-    background: #3e4e1f;
+    background: #2e3d2f;
     color: white;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 16px;
+    margin-top: 20px;
 }
 
 </style>
@@ -114,19 +119,20 @@ button {
 <body>
 
 <h1>Me_morille 🍄</h1>
-<p>Retrouve les paires de morilles !</p>
-
 <div id="moves">Coups : 0</div>
-
-<!-- MESSAGE DE VICTOIRE -->
-<div id="winMessage"></div>
 
 <div class="game-board" id="gameBoard"></div>
 
 <button onclick="restartGame()">Recommencer</button>
 
+<!-- IMAGE FINALE -->
+<div id="winScreen">
+    <h2>🌟 Maître des morilles 🌟</h2>
+    <img src="victoire.jpg" alt="Victoire">
+</div>
+
 <script>
-// 🎨 IMAGES DES MORILLES (JPG que tu as uploadé)
+
 const images = [
     "1.jpg",
     "2.jpg",
@@ -141,14 +147,12 @@ let moves = 0;
 
 const board = document.getElementById("gameBoard");
 const movesDisplay = document.getElementById("moves");
-const winMessage = document.getElementById("winMessage");
+const winScreen = document.getElementById("winScreen");
 
-// Mélanger les cartes
 function shuffle(array) {
     array.sort(() => 0.5 - Math.random());
 }
 
-// Créer le plateau
 function createBoard() {
     board.innerHTML = "";
     shuffle(cardsArray);
@@ -172,7 +176,6 @@ function createBoard() {
     });
 }
 
-// Retourner la carte
 function flipCard() {
     if (lockBoard) return;
     if (this === firstCard) return;
@@ -191,7 +194,6 @@ function flipCard() {
     checkMatch();
 }
 
-// Vérifier si c'est une paire
 function checkMatch() {
     let isMatch = firstCard.dataset.image === secondCard.dataset.image;
 
@@ -210,35 +212,27 @@ function checkMatch() {
     }
 }
 
-// Réinitialiser le plateau après une paire
 function resetBoard() {
     [firstCard, secondCard, lockBoard] = [null, null, false];
 }
 
-// Vérifier victoire
 function checkWin() {
     const flippedCards = document.querySelectorAll(".flip");
     if (flippedCards.length === cardsArray.length) {
-        winMessage.textContent = "🎉 Bravo ! Tu as trouvé toutes les morilles ! 🍄✨";
-        winMessage.style.display = "block";
+        winScreen.style.display = "block";
     }
 }
 
-// Recommencer le jeu
 function restartGame() {
     moves = 0;
     movesDisplay.textContent = "Coups : 0";
-    winMessage.style.display = "none";
+    winScreen.style.display = "none";
     createBoard();
 }
 
-// Démarrer le jeu
 createBoard();
 
 </script>
 
 </body>
 </html>
-
-    transform-style: preserve-3d;
-    transition: transform 0.5s;
