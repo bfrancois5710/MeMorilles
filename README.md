@@ -84,17 +84,19 @@ h1 {
     position: absolute;
     width: 100%;
     height: 100%;
+    border-radius: 20px;
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
-/* 🃏 RECTO UNIQUE */
 .front {
     background-image: url("Bbm5.jpg");
     background-size: cover;
     background-position: center;
+    transform: rotateY(0deg);
+    z-index: 2;
 }
 
-/* 🍄 VERSO */
 .back {
     transform: rotateY(180deg);
     background-size: cover;
@@ -117,7 +119,7 @@ button {
 
 <body>
 
-<h1>Me_morille 🍄</h1>
+<h1> 🍄MeMorille 🍄</h1>
 <div id="moves">Coups : 0</div>
 
 <div class="game-board" id="gameBoard"></div>
@@ -126,7 +128,7 @@ button {
 
 <!-- IMAGE FINALE -->
 <div id="winScreen">
-    <h2>🌟 Maître des morilles 🌟</h2>
+    <h2>🌟 Maître Morilles 🌟</h2>
     <img src="victoire.jpg" alt="Victoire">
 </div>
 
