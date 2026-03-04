@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🍄 MeMorille 🍄</title>
 
-<!-- Google Font si tu veux style Impact -->
+<!-- Google Font Impact-like -->
 <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 
 <style>
@@ -90,6 +90,26 @@ button {
     font-size: 16px;
     text-align: center;
 }
+#topScores ul {
+    list-style: none;
+    padding: 0;
+    max-width: 400px;
+    margin: 10px auto;
+    text-align: left;
+}
+#topScores li {
+    padding: 5px 10px;
+    margin: 4px 0;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#topScores .first { background: gold; font-weight: bold; }
+#topScores .second { background: silver; font-weight: bold; }
+#topScores .third { background: #cd7f32; font-weight: bold; }
+.stars { margin-left: 10px; color: yellow; }
 </style>
 </head>
 <body>
@@ -116,7 +136,7 @@ button {
     <button onclick="restartGame()">Rejouer</button>
 </div>
 
-<!-- Firebase -->
+<!-- Firebase + Jeu -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
   import { getDatabase, ref, push, set, query, orderByChild, limitToFirst, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
@@ -144,6 +164,9 @@ button {
   const movesDisplay = document.getElementById("moves");
   const winScreen = document.getElementById("winScreen");
   const scoreList = document.getElementById("scoreList");
+
+  // Son victoire
+  const winAudio = new Audio("success.mp3");
 
   let bestScore = localStorage.getItem("bestScore") || Infinity;
   const bestScoreDiv = document.getElementById("bestScore");
@@ -209,6 +232,7 @@ button {
     const flippedCards = document.querySelectorAll(".flip");
     if(flippedCards.length === cardsArray.length){
         winScreen.style.display = "flex";
+        winAudio.play(); // 🔊 Son victoire
         const pseudo = document.getElementById("pseudoInput").value || "Anonyme";
 
         // Enregistrer score sur Firebase
@@ -237,10 +261,20 @@ button {
     const snapshot = await get(scoresRef);
     const scores = snapshot.val();
     scoreList.innerHTML = "";
+
     if(scores){
-        Object.values(scores).forEach(s=>{
+        let arr = Object.values(scores).sort((a,b)=> a.score - b.score);
+        arr.forEach((s,index)=>{
             const li = document.createElement("li");
-            li.textContent = `${s.pseudo} : ${s.score} coups`;
+            if(index === 0) li.classList.add("first");
+            else if(index === 1) li.classList.add("second");
+            else if(index === 2) li.classList.add("third");
+
+            let stars = 1;
+            if(s.score <= 10) stars = 3;
+            else if(s.score <= 15) stars = 2;
+
+            li.innerHTML = `${index+1}. ${s.pseudo} : ${s.score} coups <span class="stars">${'⭐'.repeat(stars)}</span>`;
             scoreList.appendChild(li);
         });
     }
@@ -256,6 +290,5 @@ button {
   createBoard();
   updateTopScores();
 </script>
-
 </body>
 </html>
