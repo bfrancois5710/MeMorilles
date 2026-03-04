@@ -9,7 +9,7 @@ Me-morilles is a memory game card
 <style>
 body {
     font-family: Arial, sans-serif;
-    background-image: url("5.jpg");
+    background-image: url("tout-savoir-sur-la-foret.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -24,16 +24,17 @@ h1 {
 }
 
 .game-board {
+    width: 360px;
+    margin: 30px auto;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    max-width: 900px;
-    margin: 40px auto;
+    gap: 10px;
 }
 
+
 .card {
-    width: 150px;
-    height: 220px;
+    width: 100px;
+    height: 170px;
 }
 
 .card.flip {
