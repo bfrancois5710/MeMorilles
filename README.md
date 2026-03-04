@@ -60,23 +60,15 @@ h1 { margin-top: 20px; }
     gap: 20px;
     max-width: 900px;
     margin: 40px auto;
+    perspective: 1000px;
 }
 
-/* CARTES */
 .card {
     width: 100%;
     aspect-ratio: 2/3;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.6s;
     cursor: pointer;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-}
-.card.flip {
-    transform: rotateY(180deg);
-    animation: popCard 0.3s ease;
 }
 
 .card img {
@@ -87,16 +79,22 @@ h1 { margin-top: 20px; }
     border-radius: 20px;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    transition: transform 0.6s;
 }
+
 .front-img { transform: rotateY(0deg); z-index:2; }
 .back-img { transform: rotateY(180deg); }
 
-/* POP FLIP */
+.card.flip img.front-img { transform: rotateY(180deg); }
+.card.flip img.back-img { transform: rotateY(0deg); }
+
+/* Effet pop lors du flip */
 @keyframes popCard {
     0% { transform: scale(0.8); }
-    50% { transform: scale(1.2); }
+    50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
+.card.flip { animation: popCard 0.3s ease; }
 
 /* BOUTON */
 button {
@@ -128,7 +126,7 @@ button {
 </div>
 
 <script>
-// Images des cartes
+// Fichiers images
 const images = ["1.jpg","2.jpg","3.jpg","4.jpg"];
 let cardsArray = [...images, ...images];
 let firstCard, secondCard;
@@ -143,25 +141,23 @@ const winScreen = document.getElementById("winScreen");
 // Son succès
 const successSound = new Audio("success.mp3");
 
-// Mélanger cartes
+// Mélanger
 function shuffle(array){ array.sort(() => 0.5 - Math.random()); }
 
-// Créer plateau
+// Créer le plateau
 function createBoard(){
     board.innerHTML = "";
     shuffle(cardsArray);
 
-    cardsArray.forEach(image => {
+    cardsArray.forEach(image=>{
         const card = document.createElement("div");
         card.classList.add("card");
         card.dataset.image = image;
 
-        // Recto unique
         const frontImg = document.createElement("img");
         frontImg.classList.add("front-img");
         frontImg.src = "bbm7jpg.JPG";
 
-        // Verso différent
         const backImg = document.createElement("img");
         backImg.classList.add("back-img");
         backImg.src = image;
@@ -182,11 +178,9 @@ function flipCard(){
     this.classList.add("flip");
 
     if(!firstCard){ firstCard = this; return; }
-
     secondCard = this;
     moves++;
     movesDisplay.textContent = "Coups : " + moves;
-
     checkMatch();
 }
 
@@ -196,7 +190,6 @@ function checkMatch(){
     if(isMatch){
         successSound.currentTime = 0;
         successSound.play();
-
         firstCard.removeEventListener("click", flipCard);
         secondCard.removeEventListener("click", flipCard);
         resetBoard();
@@ -207,7 +200,7 @@ function checkMatch(){
             firstCard.classList.remove("flip");
             secondCard.classList.remove("flip");
             resetBoard();
-        }, 1000);
+        },1000);
     }
 }
 
@@ -230,7 +223,7 @@ function restartGame(){
     createBoard();
 }
 
-// Démarrer jeu
+// Démarrer
 createBoard();
 </script>
 
