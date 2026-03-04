@@ -182,7 +182,7 @@ function checkWin() {
     const flippedCards = document.querySelectorAll(".flip");
     if (flippedCards.length === cardsArray.length) {
         setTimeout(() => {
-            alert("Bravo ! Tu es un maître des morilles 🍄✨");
+            alert("🍄✨Bravo ! Tu es un maître des morilles 🍄✨");
         }, 500);
     }
 
@@ -190,16 +190,6 @@ function restartGame() {
     moves = 0;
     movesDisplay.textContent = "Coups : 2";
     createBoard();
-}#winMessage {
-    animation: pop 0.5s ease forwards;
-}
-
-@keyframes pop {
-    0% { transform: scale(0); opacity: 0; }
-    50% { transform: scale(1.2); opacity: 1; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
 
 createBoard();
 </script>
